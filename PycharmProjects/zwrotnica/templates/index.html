@@ -62,10 +62,10 @@
       <div class="about-us--text">
         <h2>O nas</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas vitae animi rem pariatur incidunt libero optio esse quisquam illo omnis.</p>
-        <img src={% static "css/images/signature.svg" %} class="about-us--text-signature" alt="Signature" />
+        <img src={% static "images/signature.svg" %} class="about-us--text-signature" alt="Signature" />
       </div>
       <div class="about-us--image">
-          <img src={% static "css/images/about-us.jpg" %} alt="People in circle" />
+          <img src={% static "images/about-us.jpg" %} alt="People in circle" />
       </div>
     </section>
 
@@ -89,7 +89,9 @@
               <div class="title">{{ foundation.name }}</div>
               <div class="subtitle">{{ foundation.description }}</div>
             </div>
-            <div class="col"><div class="text">{% for category in foundation.get_all_categories %}{{ category.1 }}, {% endfor %}</div></div>
+            <div class="col"><div class="text">
+                {{ foundation.categories.all|join:", " }}
+            </div></div>
           </li>
             {% endfor %}
         </ul>
@@ -117,7 +119,7 @@
               <div class="subtitle">{{ ngo.description }}</div>
             </div>
 
-            <div class="col"><div class="text">{% for category in ngo.get_all_categories %}{{ category.1 }}, {% endfor %}</div></div>
+            <div class="col"><div class="text">{{ ngo.categories.all|join:", " }}</div></div>
           </li>
         {% endfor %}
 
@@ -145,7 +147,7 @@
               <div class="subtitle">{{ fundraiser.description }}</div>
             </div>
 
-            <div class="col"><div class="text">{% for category in fundraiser.get_all_categories %}{{ category.1 }}, {% endfor %}</div></div>
+            <div class="col"><div class="text">{{ fundraiser.categories.all|join:", " }}</div></div>
           </li>
         {% endfor %}
         </ul>
