@@ -11,8 +11,18 @@ class LandingPageView(View):
         bags_total = 0
         for d in donations:
             bags_total += d.quantity
-        donated_institutions = Institution.objects.filter(donation__gt=0)
-        return render(request, 'index.html', {'bags_total': bags_total, 'donated_institutions': donated_institutions})
+        donated_institutions = Institution.objects.filter(donation__gt=0).count()
+        foundations = Institution.objects.filter(type='F')
+        ngos = Institution.objects.filter(type='OP')
+        fundraisers = Institution.objects.filter(type='ZL')
+        ctx = {
+            'bags_total': bags_total,
+            'donated_institutions': donated_institutions,
+            'foundations': foundations,
+            'ngos': ngos,
+            'fundraisers': fundraisers,
+        }
+        return render(request, 'index.html', ctx)
 
 class AddDonationView(View):
     def get(self, request):

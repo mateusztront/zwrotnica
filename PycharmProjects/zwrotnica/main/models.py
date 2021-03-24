@@ -6,6 +6,8 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=124)
 
+
+
 INSTITUTION_TYPES = [
     ('F', 'fundacja'),
     ('OP', 'organizacja pozarządowa'),
@@ -16,7 +18,12 @@ class Institution(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
     type = models.CharField(max_length=2, choices=INSTITUTION_TYPES, default='F')
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name='institution')
+
+    @property
+    def get_all_categories(self):
+        all_categories = Category.objects.filter(institution=self.id).values_list()
+        return all_categories
 
 class Donation(models.Model):
     quantity = models.IntegerField()
