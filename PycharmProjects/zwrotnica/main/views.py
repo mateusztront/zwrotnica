@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, views
+from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse
 from django.views import View
 
@@ -34,6 +35,26 @@ class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
 
+    def post(self, request):
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, username=email, password=password) #czy tak moze byc?
+        if user is not None:
+            login(request, user)
+            return redirect('landing-page')
+        else:
+            try:
+                User.objects.get(email__exact=email)
+                return render(request, 'login.html', {'error': 'błędne hasło'})
+            except:
+                return render(request, 'register.html', {'error': "Brak podanego adresu email w bazie danych"})
+
+# class LoginView(views.LoginView): #niedokonczone
+#     template_name = 'login.html'
+#
+#     def get_success_url(self):
+#         return reverse('landing_page')
+
 
 class RegisterView(View):
     def get(self, request):
@@ -54,3 +75,6 @@ class RegisterView(View):
             return redirect('login')
         else:
             return render(request, 'register.html', {'error': 'Wprowadzone hasła nie są identyczne'})
+
+
+
