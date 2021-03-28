@@ -4,6 +4,8 @@ from django.contrib.auth.models import User, UserManager, AbstractUser
 from django.core.exceptions import PermissionDenied
 from django.db import models
 
+from zwrotnica import settings
+
 
 class UserManager(UserManager):
 
@@ -77,6 +79,6 @@ class Donation(models.Model):
     pick_up_date = models.DateField()
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
-    user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, default=None, on_delete=models.CASCADE)
 
 

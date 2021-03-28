@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate, views
+from django.contrib.auth import login, authenticate, views, logout
 from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse
 from django.views import View
@@ -55,6 +55,10 @@ class LoginView(View):
 #     def get_success_url(self):
 #         return reverse('landing_page')
 
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('landing-page')
 
 class RegisterView(View):
     def get(self, request):
