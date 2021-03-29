@@ -32,7 +32,8 @@ class AddDonationView(LoginRequiredMixin, View):
 
     def get(self, request):
         categories = Category.objects.all()
-        return render(request, 'form.html', {'categories': categories})
+        institutions = Institution.objects.all()
+        return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
 
 
 class LoginView(View):
@@ -59,10 +60,12 @@ class LoginView(View):
 #     def get_success_url(self):
 #         return reverse('landing_page')
 
+
 class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('landing-page')
+
 
 class RegisterView(View):
     def get(self, request):
