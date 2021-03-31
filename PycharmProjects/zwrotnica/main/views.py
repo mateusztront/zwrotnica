@@ -35,6 +35,21 @@ class AddDonationView(LoginRequiredMixin, View):
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
 
+    # def post(self, request):
+    #     Donation.objects.create(
+    #         quantity=request.POST['quantity']
+    #         categories = models.ManyToManyField(Category)
+    #         institutions = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    #         address = models.CharField(max_length=128)
+    #         phone_number = models.CharField(max_length=32)
+    #         city = models.CharField(max_length=64)
+    #         zip_code = models.CharField(max_length=16)
+    #         pick_up_date = models.DateField()
+    #         pick_up_time = models.TimeField()
+    #         pick_up_comment = models.TextField()
+    #         user =
+    #     )
+
 
 class LoginView(View):
     def get(self, request):

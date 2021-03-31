@@ -235,6 +235,25 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
       // TODO: get data from inputs and show them in summary
+      //playground start
+
+      // let inputCategories = this.$form.querySelectorAll("input[name=categories]:checked");
+      // console.log(inputCategories)
+
+      // fetch miedzy krokami 2 i 3 z id kategorii, if i wstrzykiwac HTML dla kazdego
+
+      //playground end
+      //data gathering
+      var elements = document.forms[0].elements;
+      document.querySelector("#bags").innerHTML = elements.namedItem("bags").value;
+      document.querySelector("#fundation-name").innerHTML = elements.namedItem("organization").value;
+      document.querySelector("#address").innerHTML = elements.namedItem("address").value;
+      document.querySelector("#city").innerHTML = elements.namedItem("city").value;
+      document.querySelector("#postcode").innerHTML = elements.namedItem("postcode").value;
+      document.querySelector("#phone").innerHTML = elements.namedItem("phone").value;
+      document.querySelector("#donation_date").innerHTML = elements.namedItem("data").value;
+      document.querySelector("#donation_time").innerHTML = elements.namedItem("time").value;
+      document.querySelector("#more_info").innerHTML = elements.namedItem("more_info").value;
     }
 
     /**
