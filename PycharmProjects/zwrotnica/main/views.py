@@ -12,7 +12,7 @@ class LandingPageView(View):
         bags_total = 0
         for d in donations:
             bags_total += d.quantity
-        donated_institutions = Institution.objects.filter(donation__gt=0).count()
+        donated_institutions = Institution.objects.filter(donation__gt=0).distinct().count()
         foundations = Institution.objects.filter(type='F')
         ngos = Institution.objects.filter(type='OP')
         fundraisers = Institution.objects.filter(type='ZL')
@@ -33,7 +33,6 @@ class AddDonationView(LoginRequiredMixin, View):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
-
 
 
     def post(self, request):
