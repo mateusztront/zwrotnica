@@ -1,7 +1,6 @@
-from django.contrib.auth import login, authenticate, views, logout
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect, resolve_url
-from django.urls import reverse
+from django.shortcuts import render, redirect
 from django.views import View
 
 from main.models import Donation, Institution, User, Category
@@ -35,20 +34,24 @@ class AddDonationView(LoginRequiredMixin, View):
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
 
-    # def post(self, request):
-    #     Donation.objects.create(
-    #         quantity=request.POST['quantity']
-    #         categories = models.ManyToManyField(Category)
-    #         institutions = models.ForeignKey(Institution, on_delete=models.CASCADE)
-    #         address = models.CharField(max_length=128)
-    #         phone_number = models.CharField(max_length=32)
-    #         city = models.CharField(max_length=64)
-    #         zip_code = models.CharField(max_length=16)
-    #         pick_up_date = models.DateField()
-    #         pick_up_time = models.TimeField()
-    #         pick_up_comment = models.TextField()
-    #         user =
-    #     )
+
+
+    def post(self, request):
+        donation = Donation.objects.create(
+            quantity=request.POST['bags'],
+            institutions=Institution.objects.get(id=request.POST['organization']),
+            address=request.POST['address'],
+            phone_number=request.POST['phone'],
+            city=request.POST['city'],
+            zip_code=request.POST['postcode'],
+            pick_up_date=request.POST['data'],
+            pick_up_time=request.POST['time'],
+            pick_up_comment=request.POST['more_info'],
+            user=request.user,
+        )
+        donation.categories.set(request.POST['categories'])
+        donation.save()
+        return render(request, 'form-confirmation.html')
 
 
 class LoginView(View):
@@ -58,7 +61,7 @@ class LoginView(View):
     def post(self, request):
         email = request.POST['email']
         password = request.POST['password']
-        user = authenticate(request, username=email, password=password) #czy tak moze byc?
+        user = authenticate(request, username=email, password=password)  # czy tak moze byc?
         if user is not None:
             login(request, user)
             return redirect('landing-page')
@@ -68,6 +71,7 @@ class LoginView(View):
                 return render(request, 'login.html', {'error': 'błędne hasło'})
             except:
                 return render(request, 'register.html', {'error': "Brak podanego adresu email w bazie danych"})
+
 
 # class LoginView(views.LoginView): #niedokonczone
 #     template_name = 'login.html'
@@ -101,6 +105,3 @@ class RegisterView(View):
             return redirect('login')
         else:
             return render(request, 'register.html', {'error': 'Wprowadzone hasła nie są identyczne'})
-
-
-
