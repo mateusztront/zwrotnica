@@ -67,6 +67,9 @@ class Institution(models.Model):
     type = models.CharField(max_length=2, choices=INSTITUTION_TYPES, default='F')
     categories = models.ManyToManyField(Category, related_name='institution')
 
+    def __str__(self):
+        return self.name
+
 
 class Donation(models.Model):
     quantity = models.IntegerField()
@@ -78,7 +81,7 @@ class Donation(models.Model):
     zip_code = models.CharField(max_length=16)
     pick_up_date = models.DateField()
     pick_up_time = models.TimeField()
-    pick_up_comment = models.TextField()
+    pick_up_comment = models.TextField(null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, default=None, on_delete=models.CASCADE)
 
 
