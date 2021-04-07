@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
-
     <section>
         <h2>Profil</h2>
         <div>
@@ -11,4 +8,11 @@
         <p>Nazwisko: {{ user.last_name }}
         <p>Email: {{ user.email }}</div>
     </section>
+    <ul>
+    {% for d in user_donation %}
+    <li>Worki: {{ d.quantity }} dla {{ d.institutions }},
+        kategorie: {{ d.categories.all|join:", " }},
+        data: {{ d.pick_up_date }}, godzina: {{ d.pick_up_time }}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}

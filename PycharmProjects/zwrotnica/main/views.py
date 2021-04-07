@@ -105,6 +105,9 @@ class RegisterView(View):
         else:
             return render(request, 'register.html', {'error': 'Wprowadzone hasła nie są identyczne'})
 
+
 class ProfilView(View):
+
     def get(self, request):
-        return render(request, 'profil.html', {'user': request.user})
+        user_donation = Donation.objects.filter(user_id=request.user.id)
+        return render(request, 'profil.html', {'user': request.user, 'user_donation': user_donation})
