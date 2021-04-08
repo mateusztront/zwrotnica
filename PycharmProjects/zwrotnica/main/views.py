@@ -48,7 +48,7 @@ class AddDonationView(LoginRequiredMixin, View):
             pick_up_comment=request.POST.get('more_info'),
             user=request.user,
         )
-        categories_list = list(request.POST.get('categories').split(",")) #sprawdzic
+        categories_list = list(request.POST.get('categories').split(",")) # lepiej przez walidacje forma
         donation.categories.set(categories_list)
         donation.save()
         return render(request, 'form-confirmation.html')
@@ -61,7 +61,7 @@ class LoginView(View):
     def post(self, request):
         email = request.POST['email']
         password = request.POST['password']
-        user = authenticate(request, username=email, password=password)  # czy tak moze byc?
+        user = authenticate(request, username=email, password=password)  # lepiej poprawic
         if user is not None:
             login(request, user)
             return redirect('landing-page')
@@ -107,7 +107,7 @@ class RegisterView(View):
             return render(request, 'register.html', {'error': 'Wprowadzone hasła nie są identyczne'})
 
 
-class ProfilView(View):
+class ProfilView(LoginRequiredMixin, View):
 
     def get(self, request):
         user_donation = Donation.objects.filter(user_id=request.user.id)

@@ -290,12 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $("input:checkbox[name='categories']:checked").each(function(){
                 categories.push($(this).val());
             });
-
-            console.log(categories);
             dataForm.append("categories", categories);
-            console.log(...dataForm);
-
-
 
             $.ajax({
                 type: 'POST',
