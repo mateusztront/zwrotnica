@@ -268,13 +268,14 @@ document.addEventListener("DOMContentLoaded", function () {
         submit(e) {
             e.preventDefault();
 
-            var dataForm = new FormData();
+            const dataForm = new FormData();
 
             //   for (var i = 0; i < this.$form.length; ++i) {
             //     dataForm.append(this.$form[i].name, this.$form[i].value);
             // }
             let elements = this.$form.querySelector("form").elements;
-            dataForm.append("bags", elements.namedItem("bags").value);
+            let csrf = document.getElementsByName('csrfmiddlewaretoken');
+            dataForm.append('bags', elements.namedItem("bags").value);
             dataForm.append("organization", elements.namedItem("organization").value);
             dataForm.append("address", elements.namedItem("address").value);
             dataForm.append("city", elements.namedItem("city").value);
@@ -282,57 +283,84 @@ document.addEventListener("DOMContentLoaded", function () {
             dataForm.append("phone", elements.namedItem("phone").value);
             dataForm.append("data", elements.namedItem("data").value);
             dataForm.append("time", elements.namedItem("time").value);
-            dataForm.append("more-info", elements.namedItem("more_info").value);
+            dataForm.append("more_info", elements.namedItem("more_info").value);
+            dataForm.append('csrfmiddlewaretoken', csrf[0].value);
 
-            console.log(dataForm);
+            let categories = []
+            $("input:checkbox[name='categories']:checked").each(function(){
+                categories.push($(this).val());
+            });
+
+            console.log(categories);
+            dataForm.append("categories", categories);
+            console.log(...dataForm);
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: "",
+                enctype: 'multipart/form-data',
+                data: dataForm,
+                success: function (response) {
+                    $("body").html(response);
+                },
+                error: function(error){
+                    console.log(error);
+                },
+                cache: false,
+                contentType: false,
+                processData: false,
+            })
+
             // JavaScript function to get cookie by name; retrieved from https://docs.djangoproject.com/en/3.1/ref/csrf/
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
+            // function getCookie(name) {
+            //     let cookieValue = null;
+            //     if (document.cookie && document.cookie !== '') {
+            //         const cookies = document.cookie.split(';');
+            //         for (let i = 0; i < cookies.length; i++) {
+            //             const cookie = cookies[i].trim();
+            //             // Does this cookie string begin with the name we want?
+            //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            //                 break;
+            //             }
+            //         }
+            //     }
+            //     return cookieValue;
+            // }
 
-// JavaScript wrapper function to send HTTP requests using Django's "X-CSRFToken" request header
-            function sendHttpAsync(path, method, body) {
-
-                let props = {
-                    method: method,
-                    headers: {
-                        "X-CSRFToken": getCookie("csrftoken")
-                    },
-                    mode: "same-origin",
-                }
-props.body = body
+                // JavaScript wrapper function to send HTTP requests using Django's "X-CSRFToken" request header
+                //             function sendHttpAsync(path, method, body) {
+                //
+                //                 let props = {
+                //                     method: method,
+                //                     headers: {
+                //                         "X-CSRFToken": getCookie("csrftoken")
+                //                     },
+                //                     mode: "same-origin",
+                //                 }
+                // props.body = body
                 // if (body !== null && body !== undefined) {
                 //     props.body = JSON.stringify(body);
                 // }
 
-                return fetch(path, props)
-                    .then(response => {
-                        return response.json()
-                            .then(result => {
-                                return {
-                                    ok: response.ok,
-                                    body: result
-                                }
-                            });
-                    })
-                    .then(resultObj => {
-                        return resultObj;
-                    })
-                    .catch(error => {
-                        throw error;
-                    });
+                // return fetch(path, props)
+                //     .then(response => {
+                //         return response.json()
+                //             .then(result => {
+                //                 return {
+                //                     ok: response.ok,
+                //                     body: result
+                //                 }
+                //             });
+                //     })
+                //     .then(resultObj => {
+                //         return resultObj;
+                //     })
+                //     .catch(error => {
+                //         throw error;
+                //     });
             }
 
 
@@ -351,12 +379,12 @@ props.body = body
             //     });
             // this.currentStep++;
             // this.updateForm();
-            sendHttpAsync("", "post", dataForm)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                });
-        }
+            // sendHttpAsync("", "post", dataForm)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         console.log('Success:', data);
+            //     });
+        // }
     }
 
     const form = document.querySelector(".form--steps");

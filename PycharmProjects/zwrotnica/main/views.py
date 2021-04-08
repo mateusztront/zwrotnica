@@ -48,7 +48,8 @@ class AddDonationView(LoginRequiredMixin, View):
             pick_up_comment=request.POST.get('more_info'),
             user=request.user,
         )
-        donation.categories.set(request.POST.get('categories'))
+        categories_list = list(request.POST.get('categories').split(",")) #sprawdzic
+        donation.categories.set(categories_list)
         donation.save()
         return render(request, 'form-confirmation.html')
 
