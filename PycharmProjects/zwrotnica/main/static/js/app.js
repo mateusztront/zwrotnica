@@ -274,7 +274,6 @@ document.addEventListener("DOMContentLoaded", function () {
             //     dataForm.append(this.$form[i].name, this.$form[i].value);
             // }
             let elements = this.$form.querySelector("form").elements;
-            let csrf = document.getElementsByName('csrfmiddlewaretoken');
             dataForm.append('bags', elements.namedItem("bags").value);
             dataForm.append("organization", elements.namedItem("organization").value);
             dataForm.append("address", elements.namedItem("address").value);
@@ -284,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
             dataForm.append("data", elements.namedItem("data").value);
             dataForm.append("time", elements.namedItem("time").value);
             dataForm.append("more_info", elements.namedItem("more_info").value);
-            dataForm.append('csrfmiddlewaretoken', csrf[0].value);
+            dataForm.append('csrfmiddlewaretoken', elements.namedItem("csrfmiddlewaretoken").value);
 
             let categories = []
             $("input:checkbox[name='categories']:checked").each(function(){

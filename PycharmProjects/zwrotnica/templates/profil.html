@@ -12,7 +12,7 @@
     {% for d in user_donation %}
     <li>Worki: {{ d.quantity }} dla {{ d.institutions }},
         kategorie: {{ d.categories.all|join:", " }},
-        data: {{ d.pick_up_date }}, godzina: {{ d.pick_up_time }}</li>
+        data: {{ d.pick_up_date }}, godzina: {{ d.pick_up_time }}, komentarz: {{ d.pick_up_comment }}</li>
     {% endfor %}
     </ul>
 {% endblock %}
