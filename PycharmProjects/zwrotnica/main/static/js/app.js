@@ -274,15 +274,15 @@ document.addEventListener("DOMContentLoaded", function () {
             //     dataForm.append(this.$form[i].name, this.$form[i].value);
             // }
             let elements = this.$form.querySelector("form").elements;
-            dataForm.append('bags', elements.namedItem("bags").value);
-            dataForm.append("organization", elements.namedItem("organization").value);
+            dataForm.append("quantity", elements.namedItem("bags").value);
+            dataForm.append("institutions", elements.namedItem("organization").value);
             dataForm.append("address", elements.namedItem("address").value);
             dataForm.append("city", elements.namedItem("city").value);
-            dataForm.append("postcode", elements.namedItem("postcode").value);
-            dataForm.append("phone", elements.namedItem("phone").value);
-            dataForm.append("data", elements.namedItem("data").value);
-            dataForm.append("time", elements.namedItem("time").value);
-            dataForm.append("more_info", elements.namedItem("more_info").value);
+            dataForm.append("zip_code", elements.namedItem("postcode").value);
+            dataForm.append("phone_number", elements.namedItem("phone").value);
+            dataForm.append("pick_up_date", elements.namedItem("data").value);
+            dataForm.append("pick_up_time", elements.namedItem("time").value);
+            dataForm.append("pick_up_comment", elements.namedItem("more_info").value);
             dataForm.append('csrfmiddlewaretoken', elements.namedItem("csrfmiddlewaretoken").value);
 
             let categories = []

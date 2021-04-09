@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 
+from main.forms import DonationForm
 from main.models import Donation, Institution, User, Category
 
 
@@ -34,24 +35,20 @@ class AddDonationView(LoginRequiredMixin, View):
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
 
-
     def post(self, request):
-        donation = Donation.objects.create(
-            quantity=request.POST.get('bags'),
-            institutions=Institution.objects.get(id=request.POST.get('organization')),
-            address=request.POST.get('address'),
-            phone_number=request.POST.get('phone'),
-            city=request.POST.get('city'),
-            zip_code=request.POST.get('postcode'),
-            pick_up_date=request.POST.get('data'),
-            pick_up_time=request.POST.get('time'),
-            pick_up_comment=request.POST.get('more_info'),
-            user=request.user,
-        )
-        categories_list = list(request.POST.get('categories').split(",")) # lepiej przez walidacje forma
-        donation.categories.set(categories_list)
-        donation.save()
-        return render(request, 'form-confirmation.html')
+        form = DonationForm(request.POST)
+        user = request.user
+        if form.is_valid():
+            donation = form.save(commit=False)
+            donation.user = user
+            donation.save()
+            form.save_m2m()
+            return render(request, 'form-confirmation.html')
+        else:
+            print(form.errors)
+            categories = Category.objects.all()
+            institutions = Institution.objects.all()
+            return render(request, 'form.html',  {'categories': categories, 'institutions': institutions})
 
 
 class LoginView(View):
