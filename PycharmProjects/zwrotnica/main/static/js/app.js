@@ -286,100 +286,49 @@ document.addEventListener("DOMContentLoaded", function () {
             dataForm.append('csrfmiddlewaretoken', elements.namedItem("csrfmiddlewaretoken").value);
 
             let categories = []
-            $("input:checkbox[name='categories']:checked").each(function(){
+            $("input:checkbox[name='categories']:checked").each(function () {
                 categories.push($(this).val());
             });
             dataForm.append("categories", categories);
 
-            $.ajax({
-                type: 'POST',
-                url: "",
-                enctype: 'multipart/form-data',
-                data: dataForm,
-                success: function (response) {
-                    $("body").html(response);
-                },
-                error: function(error){
-                    console.log(error);
-                },
-                cache: false,
-                contentType: false,
-                processData: false,
-            })
-
-            // JavaScript function to get cookie by name; retrieved from https://docs.djangoproject.com/en/3.1/ref/csrf/
-            // function getCookie(name) {
-            //     let cookieValue = null;
-            //     if (document.cookie && document.cookie !== '') {
-            //         const cookies = document.cookie.split(';');
-            //         for (let i = 0; i < cookies.length; i++) {
-            //             const cookie = cookies[i].trim();
-            //             // Does this cookie string begin with the name we want?
-            //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //     return cookieValue;
-            // }
-
-                // JavaScript wrapper function to send HTTP requests using Django's "X-CSRFToken" request header
-                //             function sendHttpAsync(path, method, body) {
-                //
-                //                 let props = {
-                //                     method: method,
-                //                     headers: {
-                //                         "X-CSRFToken": getCookie("csrftoken")
-                //                     },
-                //                     mode: "same-origin",
-                //                 }
-                // props.body = body
-                // if (body !== null && body !== undefined) {
-                //     props.body = JSON.stringify(body);
-                // }
-
-                // return fetch(path, props)
-                //     .then(response => {
-                //         return response.json()
-                //             .then(result => {
-                //                 return {
-                //                     ok: response.ok,
-                //                     body: result
-                //                 }
-                //             });
-                //     })
-                //     .then(resultObj => {
-                //         return resultObj;
-                //     })
-                //     .catch(error => {
-                //         throw error;
-                //     });
-            }
-
-
-            // fetch('/add_donation/', {
-            //     method: 'POST',
-            //     headers:{'X-CSRFToken':getCookie("csrftoken")},
-            //     body: dataForm,
-            //     credentials: 'include',
+            //AJAX send form to backend version
+            // $.ajax({
+            //     type: 'POST',
+            //     url: "",
+            //     enctype: 'multipart/form-data',
+            //     data: dataForm,
+            //     success: function (response) {
+            //         $("body").html(response);
+            //     },
+            //     error: function(error){
+            //         console.log(error);
+            //     },
+            //     cache: false,
+            //     contentType: false,
+            //     processData: false,
             // })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         console.log('Success:', data);
-            //     })
-            //     .catch(error => {
-            //         console.log('Error:', error);
-            //     });
-            // this.currentStep++;
-            // this.updateForm();
-            // sendHttpAsync("", "post", dataForm)
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         console.log('Success:', data);
-            //     });
-        // }
-    }
+
+
+            //fetch send form version
+            fetch('/add_donation/', {
+                method: 'POST',
+                body: dataForm,
+                credentials: 'same-origin',
+            })
+            .then(data => {
+                console.log('Success:', data);
+                return data.text()
+            })
+            .then(data => {
+                document.body.innerHTML = data
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+
+            this.updateForm();
+            }
+        }
 
     const form = document.querySelector(".form--steps");
     if (form !== null) {
